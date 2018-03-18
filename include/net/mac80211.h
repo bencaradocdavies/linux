@@ -2063,6 +2063,9 @@ struct ieee80211_txq {
  * @IEEE80211_HW_SUPPORTS_TDLS_BUFFER_STA: Hardware supports buffer STA on
  *	TDLS links.
  *
+ * @IEEE80211_HW_SUPPORTS_QOS_NDP: The driver (or firmware) supports QoS NDP
+ *	for AP probing.
+ *
  * @NUM_IEEE80211_HW_FLAGS: number of hardware flags, used for sizing arrays
  */
 enum ieee80211_hw_flags {
@@ -2106,6 +2109,7 @@ enum ieee80211_hw_flags {
 	IEEE80211_HW_REPORTS_LOW_ACK,
 	IEEE80211_HW_SUPPORTS_TX_FRAG,
 	IEEE80211_HW_SUPPORTS_TDLS_BUFFER_STA,
+	IEEE80211_HW_SUPPORTS_QOS_NDP,
 
 	/* keep last, obviously */
 	NUM_IEEE80211_HW_FLAGS
@@ -4478,15 +4482,10 @@ struct sk_buff *ieee80211_pspoll_get(struct ieee80211_hw *hw,
  * ieee80211_nullfunc_get - retrieve a nullfunc template
  * @hw: pointer obtained from ieee80211_alloc_hw().
  * @vif: &struct ieee80211_vif pointer from the add_interface callback.
- * @qos_ok: QoS NDP is acceptable to the caller, this should be set
- *	if at all possible
  *
  * Creates a Nullfunc template which can, for example, uploaded to
  * hardware. The template must be updated after association so that correct
  * BSSID and address is used.
- *
- * If @qos_ndp is set and the association is to an AP with QoS/WMM, the
- * returned packet will be QoS NDP.
  *
  * Note: Caller (or hardware) is responsible for setting the
  * &IEEE80211_FCTL_PM bit as well as Duration and Sequence Control fields.
@@ -4494,8 +4493,7 @@ struct sk_buff *ieee80211_pspoll_get(struct ieee80211_hw *hw,
  * Return: The nullfunc template. %NULL on error.
  */
 struct sk_buff *ieee80211_nullfunc_get(struct ieee80211_hw *hw,
-				       struct ieee80211_vif *vif,
-				       bool qos_ok);
+				       struct ieee80211_vif *vif);
 
 /**
  * ieee80211_probereq_get - retrieve a Probe Request template

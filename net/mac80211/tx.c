@@ -4448,8 +4448,7 @@ struct sk_buff *ieee80211_pspoll_get(struct ieee80211_hw *hw,
 EXPORT_SYMBOL(ieee80211_pspoll_get);
 
 struct sk_buff *ieee80211_nullfunc_get(struct ieee80211_hw *hw,
-				       struct ieee80211_vif *vif,
-				       bool qos_ok)
+				       struct ieee80211_vif *vif)
 {
 	struct ieee80211_hdr_3addr *nullfunc;
 	struct ieee80211_sub_if_data *sdata;
@@ -4465,7 +4464,7 @@ struct sk_buff *ieee80211_nullfunc_get(struct ieee80211_hw *hw,
 	ifmgd = &sdata->u.mgd;
 	local = sdata->local;
 
-	if (qos_ok) {
+	if (ieee80211_hw_check(hw, SUPPORTS_QOS_NDP)) {
 		struct sta_info *sta;
 
 		rcu_read_lock();
