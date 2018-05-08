@@ -2024,6 +2024,7 @@ SYSCALL_DEFINE3(getrandom, char __user *, buf, size_t, count,
 		printk(KERN_NOTICE "random: %s: getrandom without "
 				"GRND_NONBLOCK while crng not ready\n",
 				current->comm);
+		dump_stack();
 		ret = wait_for_random_bytes();
 		if (unlikely(ret))
 			return ret;
