@@ -2021,6 +2021,9 @@ SYSCALL_DEFINE3(getrandom, char __user *, buf, size_t, count,
 	if (!crng_ready()) {
 		if (flags & GRND_NONBLOCK)
 			return -EAGAIN;
+		printk(KERN_NOTICE "random: %s: getrandom without "
+				"GRND_NONBLOCK while crng not ready\n",
+				current->comm);
 		ret = wait_for_random_bytes();
 		if (unlikely(ret))
 			return ret;
